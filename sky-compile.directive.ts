@@ -25,10 +25,14 @@
 		};
 		
 		function link(scope, element, attrs) {
-			if(attrs.content) {
-				element.html(scope.$eval(attrs.content));
+			if ('content' in attrs) {
+				attrs.$observe('content', function(newVal) {
+					element[0].innerHTML = newVal;
+					$compile(element.contents())(scope);
+				});
+			} else {
+				$compile(element.contents())(scope);
 			}
-			$compile(element.contents())(scope);
 		}
 		
 		return directive;
